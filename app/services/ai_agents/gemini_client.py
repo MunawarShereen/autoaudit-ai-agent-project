@@ -1,14 +1,17 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
+import os
+from langchain_groq import ChatGroq
 from app.core.config import settings
 
-# Gemini 1.5 Pro model initialize kar rahe hain
 def get_gemini_model():
-    if not settings.GEMINI_API_KEY:
-        raise ValueError("GEMINI_API_KEY is missing in .env file!")
+    groq_api_key = os.getenv("GROQ_API_KEY")
+    
+    if not groq_api_key:
+        raise ValueError("GROQ_API_KEY is missing in .env file!")
         
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-pro",
-        google_api_key=settings.GEMINI_API_KEY,
-        temperature=0.2 # Temperature low rakhi hai taake code logic strict rahay
+    # Naya aur latest supported model add kar diya gaya hai
+    llm = ChatGroq(
+        api_key=groq_api_key,
+        model_name="llama-3.3-70b-versatile", # <-- Sirf ye line change hui hai
+        temperature=0.2
     )
     return llm
